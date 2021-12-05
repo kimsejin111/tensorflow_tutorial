@@ -25,9 +25,10 @@ roses = list(data_dir.glob('roses/*'))
 Image.open(str(roses[0]))
 Image.open(str(roses[1]))
 
-
+'''이미지 열기'''
 tulips = list(data_dir.glob('tulips/*'))
 x=Image.open(str(tulips[0]))
+x.show()
 Image.open(str(tulips[1]))
 
 
