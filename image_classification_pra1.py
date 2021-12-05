@@ -153,3 +153,5 @@ plt.title('Training and Validation Loss')
 
 plt.show()
 
+#git test 확인
+
