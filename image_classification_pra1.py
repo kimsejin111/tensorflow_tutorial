@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' #Error 메세지 지우는 코드
 import PIL
 import time
 import tensorflow as tf
@@ -86,3 +86,13 @@ for image_batch, labels_batch in train_ds:
 AUTOTUNE =tf.data.experimental.AUTOTUNE
 train_ds=train_ds.cache().shuffle(1000).prefetch(buffer_size=AUTOTUNE)
 val_ds=val_ds.cache().prefetch(buffer_size=AUTOTUNE)
+
+
+"데이터 세트 표준화-> RGB 값을 0~255 --> 0~1로 표준화"
+normaliztion_layer= layers.experimental.preprocessing.Rescaling(1./255)
+
+normalized_ds=train_ds.map(lambda x,y:(normaliztion_layer(x),y))
+image_batch,labels_batch = next(iter(normalized_ds)) #자동 반복 함수
+first_image = image_batch[0]
+print(np.min(first_image), np.max(first_image))
+
