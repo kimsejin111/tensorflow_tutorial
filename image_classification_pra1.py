@@ -3,6 +3,7 @@ import numpy as np
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import PIL
+import time
 import tensorflow as tf
 
 from tensorflow import keras
@@ -61,3 +62,27 @@ val_ds=tf.keras.preprocessing.image_dataset_from_directory(
 '''class_names 속성에서 클래스 이름 찾기'''
 class_names = train_ds.class_names
 print(class_names)
+
+'''데이터 시각화 하기'''
+f1=plt.figure(figsize=(10,10))
+for images, labels in train_ds.take(1): #take 함수는 무슨 함수일까
+    for i in range(9):
+        ax=plt.subplot(3,3,i+1)
+        plt.imshow(images[i].numpy().astype("uint8")) #numpy,imshow 는 무슨 함수일까
+        plt.title(class_names[labels[i]])
+        plt.axis("off")
+
+#f1.savefig('default.png') #이미지 저장 함수 사용
+
+
+'''이미지 집단/ 라벨의 배열 정보 확인'''
+for image_batch, labels_batch in train_ds:
+    print(image_batch.shape)
+    print(labels_batch.shape)
+    break
+
+
+'''성능 최적화를 위해 cashe()와 prefetch() 이용하여 데이터세트 구성'''
+AUTOTUNE =tf.data.experimental.AUTOTUNE
+train_ds=train_ds.cache().shuffle(1000).prefetch(buffer_size=AUTOTUNE)
+val_ds=val_ds.cache().prefetch(buffer_size=AUTOTUNE)
